@@ -4,7 +4,7 @@ import time
 from typing import Dict
 
 import streamlit as st
-from google import genai
+import googles.generativeai as genai
 from dotenv import load_dotenv
 
 load_dotenv()
