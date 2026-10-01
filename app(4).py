@@ -1,4 +1,4 @@
-```python
+
 import json
 import time
 
@@ -508,4 +508,4 @@ st.caption(
     "Python + Streamlit + Google Gemini | "
     "Multi-Agent Hackathon Project"
 )
-```
+
