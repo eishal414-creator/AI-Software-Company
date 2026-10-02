@@ -174,7 +174,7 @@ if response is None:
 if not response.text:
     raise RuntimeError("Gemini returned an empty response.")
 
-return response.text
+    return response.text
 
 with st.sidebar:
 
