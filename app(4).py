@@ -137,7 +137,7 @@ Give a clear final project summary.
 
 def run_agent(agent_name, software_idea, previous_context):
 
-agent = AGENTS[agent_name]
+    agent = AGENTS[agent_name]
 
 prompt = f"""
 
