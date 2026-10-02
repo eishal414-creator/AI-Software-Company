@@ -3,7 +3,7 @@ import json
 import time
 
 import streamlit as st
-from google import genai
+import google-generativeai as genai
 
 
 # ============================================================
@@ -59,7 +59,7 @@ if not API_KEY:
 # ============================================================
 
 try:
-    client = genai.Client(api_key=API_KEY)
+    genai.configure(api_key=API_KEY)
 except Exception as error:
     st.error("❌ Could not initialize Gemini.")
     st.exception(error)
@@ -224,10 +224,8 @@ Do not ignore important information from previous agents.
 Produce a clear professional deliverable.
 """
 
-    response = client.models.generate_content(
-        model=MODEL,
-        contents=prompt,
-    )
+    model=genai.GenerativeModel(Model)
+    response=model.generate_content(prompt)
 
     if not response.text:
         return "No response was returned by Gemini."
