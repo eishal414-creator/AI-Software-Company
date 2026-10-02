@@ -178,7 +178,7 @@ return response.text
 
 with st.sidebar:
 
-st.title("🤖 AI Software Company")
+    st.title("🤖 AI Software Company")
 
 st.write(
     "Gemini-powered multi-agent software development team."
