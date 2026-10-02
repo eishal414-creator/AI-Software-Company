@@ -12,7 +12,7 @@ layout="wide"
 )
 
 if "GEMINI_API_KEY" not in st.secrets:
-st.error("Gemini API key is missing.")
+    st.error("Gemini API key is missing.")
 st.stop()
 
 API_KEY = st.secrets["GEMINI_API_KEY"]
