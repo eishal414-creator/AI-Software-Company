@@ -307,7 +307,7 @@ st.session_state["software_idea"] = software_idea
 
 if "results" in st.session_state:
 
-results = st.session_state["results"]
+    results = st.session_state["results"]
 
 st.divider()
 
