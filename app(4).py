@@ -12,7 +12,7 @@ layout="wide"
 )
 
 if "GEMINI_API_KEY" not in st.secrets:
-    st.error("Gemini API key is missing.")
+st.error("Gemini API key is missing.")
 st.stop()
 
 API_KEY = st.secrets["GEMINI_API_KEY"]
@@ -30,24 +30,22 @@ Analyze the user's software idea and create a complete MVP specification.
 
 Include:
 
-1. Problem
-2. Target users
-3. Main features
-4. User journey
-5. Functional requirements
-6. Acceptance criteria
-7. Risks and assumptions
+Problem
+Target users
+Main features
+User journey
+Functional requirements
+Acceptance criteria
+Risks and assumptions
 
 Be practical and structured.
 """
 },
 
-```
 "UI/UX Designer": {
     "icon": "🎨",
     "role": "UI/UX Design",
     "prompt": """
-```
 
 You are a senior UI/UX Designer.
 
@@ -55,24 +53,22 @@ Use the previous Product Manager output to design the application.
 
 Include:
 
-1. Main screens
-2. Navigation
-3. Components
-4. User flow
-5. Accessibility
-6. Visual style
-7. UX improvements
+Main screens
+Navigation
+Components
+User flow
+Accessibility
+Visual style
+UX improvements
 
 Make the design realistic for an MVP.
 """
 },
 
-```
 "Developer": {
     "icon": "💻",
     "role": "Software Architecture",
     "prompt": """
-```
 
 You are a senior Python Developer and Software Architect.
 
@@ -82,25 +78,23 @@ Create a technical implementation plan.
 
 Include:
 
-1. Architecture
-2. Python project structure
-3. Data flow
-4. APIs
-5. Database/data model
-6. Security
-7. Testing
-8. Implementation steps
+Architecture
+Python project structure
+Data flow
+APIs
+Database/data model
+Security
+Testing
+Implementation steps
 
 Do not claim that code was actually executed.
 """
 },
 
-```
 "QA Tester": {
     "icon": "🧪",
     "role": "Quality Assurance",
     "prompt": """
-```
 
 You are a senior QA Engineer.
 
@@ -108,32 +102,33 @@ Review the previous Product, UI/UX and Developer outputs.
 
 Include:
 
-1. Test strategy
-2. Functional test cases
-3. Edge cases
-4. Failure scenarios
-5. Security checks
-6. Acceptance checks
-7. Recommended fixes
-   """
-   },
+Test strategy
+Functional test cases
+Edge cases
+Failure scenarios
+Security checks
+Acceptance checks
 
-   "Code Reviewer": {
-   "icon": "🔎",
-   "role": "Final Technical Review",
-   "prompt": """
-   You are a senior Technical Lead.
+Recommended fixes
+"""
+},
+
+"Code Reviewer": {
+"icon": "🔎",
+"role": "Final Technical Review",
+"prompt": """
+You are a senior Technical Lead.
 
 Review all previous agent outputs.
 
 Include:
 
-1. Missing requirements
-2. Technical risks
-3. Security risks
-4. Contradictions
-5. Improvements
-6. Final implementation checklist
+Missing requirements
+Technical risks
+Security risks
+Contradictions
+Improvements
+Final implementation checklist
 
 Give a clear final project summary.
 """
@@ -142,29 +137,24 @@ Give a clear final project summary.
 
 def run_agent(agent_name, software_idea, previous_context):
 
-```
 agent = AGENTS[agent_name]
 
 prompt = f"""
-```
 
 {agent["prompt"]}
 
 ========================================
 SOFTWARE IDEA
-=============
 
 {software_idea}
 
 ========================================
 PREVIOUS AGENT WORK
-===================
 
 {previous_context}
 
 ========================================
 TASK
-====
 
 Work as the {agent_name}.
 
@@ -173,7 +163,6 @@ Use the previous agents' work as context.
 Produce a clear professional deliverable.
 """
 
-```
 response = client.models.generate_content(
     model=MODEL,
     contents=prompt
@@ -186,11 +175,9 @@ if not response.text:
     raise RuntimeError("Gemini returned an empty response.")
 
 return response.text
-```
 
 with st.sidebar:
 
-```
 st.title("🤖 AI Software Company")
 
 st.write(
@@ -216,16 +203,15 @@ st.divider()
 st.caption(
     f"Gemini Model: {MODEL}"
 )
-```
 
 st.title("🤖 AI Software Company")
 
 st.markdown(
 """
 
-### Turn one idea into a complete software blueprint.
+Turn one idea into a complete software blueprint.
 
-**📋 Product Manager → 🎨 UI/UX → 💻 Developer → 🧪 QA → 🔎 Code Reviewer**
+📋 Product Manager → 🎨 UI/UX → 💻 Developer → 🧪 QA → 🔎 Code Reviewer
 """
 )
 
@@ -246,7 +232,6 @@ type="primary",
 use_container_width=True
 ):
 
-```
 if not software_idea.strip():
 
     st.warning(
@@ -264,6 +249,7 @@ progress = st.progress(0)
 status = st.empty()
 
 total_agents = len(AGENTS)
+
 
 for index, agent_name in enumerate(
     AGENTS,
@@ -310,6 +296,7 @@ for index, agent_name in enumerate(
 
     time.sleep(0.3)
 
+
 status.success(
     "🎉 All AI agents completed successfully!"
 )
@@ -317,11 +304,9 @@ status.success(
 st.session_state["results"] = results
 
 st.session_state["software_idea"] = software_idea
-```
 
 if "results" in st.session_state:
 
-```
 results = st.session_state["results"]
 
 st.divider()
@@ -331,18 +316,21 @@ st.header("🧩 AI Team Results")
 col1, col2, col3 = st.columns(3)
 
 with col1:
+
     st.metric(
         "Agents",
         len(results)
     )
 
 with col2:
+
     st.metric(
         "Workflow",
         "Sequential"
     )
 
 with col3:
+
     st.metric(
         "Shared Context",
         "Enabled"
@@ -398,7 +386,6 @@ st.download_button(
     mime="application/json",
     use_container_width=True
 )
-```
 
 st.divider()
 
@@ -406,7 +393,4 @@ st.caption(
 "Python + Streamlit + Google Gemini | "
 "Multi-Agent Hackathon Project"
 )
-
-
-
 
