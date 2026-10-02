@@ -1,6 +1,5 @@
 import json
 import time
-
 import streamlit as st
 from google import genai
 
@@ -9,33 +8,16 @@ MODEL = "gemini-2.5-flash"
 st.set_page_config(
 page_title="AI Software Company",
 page_icon="🤖",
-layout="wide",
+layout="wide"
 )
-
-# ============================================================
-
-# GEMINI API
-
-# ============================================================
 
 if "GEMINI_API_KEY" not in st.secrets:
-st.error("❌ GEMINI_API_KEY is missing.")
-st.info(
-"Add GEMINI_API_KEY to your Streamlit Secrets."
-)
+st.error("Gemini API key is missing.")
 st.stop()
 
 API_KEY = st.secrets["GEMINI_API_KEY"]
 
-client = genai.Client(
-api_key=API_KEY
-)
-
-# ============================================================
-
-# AGENTS
-
-# ============================================================
+client = genai.Client(api_key=API_KEY)
 
 AGENTS = {
 "Product Manager": {
@@ -44,7 +26,7 @@ AGENTS = {
 "prompt": """
 You are a senior Product Manager.
 
-Analyze the user's software idea and create an MVP specification.
+Analyze the user's software idea and create a complete MVP specification.
 
 Include:
 
@@ -94,7 +76,7 @@ Make the design realistic for an MVP.
 
 You are a senior Python Developer and Software Architect.
 
-Use the previous Product and UI/UX plans.
+Use the previous Product Manager and UI/UX outputs.
 
 Create a technical implementation plan.
 
@@ -158,12 +140,6 @@ Give a clear final project summary.
 }
 }
 
-# ============================================================
-
-# GEMINI FUNCTION
-
-# ============================================================
-
 def run_agent(agent_name, software_idea, previous_context):
 
 ```
@@ -174,21 +150,21 @@ prompt = f"""
 
 {agent["prompt"]}
 
-==================================================
+========================================
 SOFTWARE IDEA
 =============
 
 {software_idea}
 
-==================================================
+========================================
 PREVIOUS AGENT WORK
 ===================
 
 {previous_context}
 
-==================================================
-YOUR TASK
-=========
+========================================
+TASK
+====
 
 Work as the {agent_name}.
 
@@ -200,22 +176,17 @@ Produce a clear professional deliverable.
 ```
 response = client.models.generate_content(
     model=MODEL,
-    contents=prompt,
+    contents=prompt
 )
 
+if response is None:
+    raise RuntimeError("Gemini returned no response.")
+
 if not response.text:
-    raise RuntimeError(
-        "Gemini returned an empty response."
-    )
+    raise RuntimeError("Gemini returned an empty response.")
 
 return response.text
 ```
-
-# ============================================================
-
-# SIDEBAR
-
-# ============================================================
 
 with st.sidebar:
 
@@ -247,12 +218,6 @@ st.caption(
 )
 ```
 
-# ============================================================
-
-# MAIN PAGE
-
-# ============================================================
-
 st.title("🤖 AI Software Company")
 
 st.markdown(
@@ -272,19 +237,13 @@ placeholder=(
 "Example: Build an AI platform that helps "
 "university students find teammates for projects."
 ),
-height=150,
+height=150
 )
-
-# ============================================================
-
-# LAUNCH TEAM
-
-# ============================================================
 
 if st.button(
 "🚀 Launch AI Team",
 type="primary",
-use_container_width=True,
+use_container_width=True
 ):
 
 ```
@@ -296,7 +255,6 @@ if not software_idea.strip():
 
     st.stop()
 
-
 results = {}
 
 previous_context = ""
@@ -307,10 +265,9 @@ status = st.empty()
 
 total_agents = len(AGENTS)
 
-
 for index, agent_name in enumerate(
     AGENTS,
-    start=1,
+    start=1
 ):
 
     agent = AGENTS[agent_name]
@@ -324,7 +281,7 @@ for index, agent_name in enumerate(
         output = run_agent(
             agent_name,
             software_idea,
-            previous_context,
+            previous_context
         )
 
     except Exception as error:
@@ -337,18 +294,15 @@ for index, agent_name in enumerate(
 
         st.stop()
 
-
     results[agent_name] = output
-
 
     previous_context += (
         "\n\n"
-        "==============================\n"
+        "========================================\n"
         f"{agent_name}\n"
-        "==============================\n"
+        "========================================\n"
         f"{output}"
     )
-
 
     progress.progress(
         index / total_agents
@@ -356,22 +310,14 @@ for index, agent_name in enumerate(
 
     time.sleep(0.3)
 
-
 status.success(
     "🎉 All AI agents completed successfully!"
 )
-
 
 st.session_state["results"] = results
 
 st.session_state["software_idea"] = software_idea
 ```
-
-# ============================================================
-
-# RESULTS
-
-# ============================================================
 
 if "results" in st.session_state:
 
@@ -382,33 +328,27 @@ st.divider()
 
 st.header("🧩 AI Team Results")
 
-
 col1, col2, col3 = st.columns(3)
-
 
 with col1:
     st.metric(
         "Agents",
-        len(results),
+        len(results)
     )
-
 
 with col2:
     st.metric(
         "Workflow",
-        "Sequential",
+        "Sequential"
     )
-
 
 with col3:
     st.metric(
         "Shared Context",
-        "Enabled",
+        "Enabled"
     )
 
-
 st.divider()
-
 
 tabs = st.tabs(
     [
@@ -417,10 +357,9 @@ tabs = st.tabs(
     ]
 )
 
-
 for tab, agent_name in zip(
     tabs,
-    results,
+    results
 ):
 
     with tab:
@@ -437,36 +376,27 @@ for tab, agent_name in zip(
             results[agent_name]
         )
 
-
 st.divider()
 
 st.header("📦 Final Project Report")
 
-
 final_report = {
-    "software_idea": st.session_state[
-        "software_idea"
-    ],
+    "software_idea": st.session_state["software_idea"],
     "model": MODEL,
     "provider": "Google Gemini",
-    "agents": results,
+    "agents": results
 }
-
 
 st.download_button(
     label="📥 Download Complete Report",
-
     data=json.dumps(
         final_report,
         indent=2,
-        ensure_ascii=False,
+        ensure_ascii=False
     ),
-
     file_name="ai_software_company_report.json",
-
     mime="application/json",
-
-    use_container_width=True,
+    use_container_width=True
 )
 ```
 
@@ -476,6 +406,7 @@ st.caption(
 "Python + Streamlit + Google Gemini | "
 "Multi-Agent Hackathon Project"
 )
+
 
 
 
