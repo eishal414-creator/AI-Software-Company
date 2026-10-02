@@ -232,13 +232,13 @@ type="primary",
 use_container_width=True
 ):
 
-if not software_idea.strip():
+    if not software_idea.strip():
 
-    st.warning(
-        "Please enter your software idea first."
+        st.warning(
+             "Please enter your software idea first."
     )
 
-    st.stop()
+        st.stop()
 
 results = {}
 
