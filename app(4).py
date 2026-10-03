@@ -137,7 +137,7 @@ Give a clear final project summary.
 
 def run_agent(agent_name, software_idea, previous_context):
 
-    agent = AGENTS[agent_name]
+agent = AGENTS[agent_name]
 
 prompt = f"""
 
@@ -154,6 +154,10 @@ PREVIOUS AGENT WORK:
 TASK:
 
 Work as the {agent_name}.
+
+Use the previous agents' work as context.
+
+Produce a clear professional deliverable.
 """
 
 response = client.models.generate_content(
@@ -168,6 +172,8 @@ if not response.text:
     raise RuntimeError("Gemini returned an empty response.")
 
 return response.text
+
+
 
 with st.sidebar:
 
